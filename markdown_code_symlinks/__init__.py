@@ -79,16 +79,20 @@ class MarkdownSymlinksDomain(Domain):
         'xref': XRefRole(),
     }
 
-    docs_root_dir = os.path.realpath(os.path.dirname(__file__))
-    code_root_dir = os.path.realpath(os.path.join(docs_root_dir, ".."))
-
     mapping = {
         'docs2code': {},
         'code2docs': {},
     }
 
-    github_repo_url = ""
-    github_repo_branch = ""
+    @classmethod
+    def init_domain(cls, github_repo_url, github_repo_branch,
+            docs_root_dir, code_root_dir):
+        """Initialize the github repository to update links correctly."""
+        cls.github_repo_url = github_repo_url
+        cls.github_repo_branch = github_repo_branch
+
+        cls.docs_root_dir = docs_root_dir
+        cls.code_root_dir = code_root_dir
 
     @classmethod
     def relative_code(cls, url):
@@ -163,12 +167,6 @@ Current Value: {}
 
         import pprint
         pprint.pprint(cls.mapping)
-
-    @classmethod
-    def add_github_repo(cls, github_repo_url, github_repo_branch):
-        """Initialize the github repository to update links correctly."""
-        cls.github_repo_url = github_repo_url
-        cls.github_repo_branch = github_repo_branch
 
     # Overriden method to solve the cross-reference link
     def resolve_xref(
