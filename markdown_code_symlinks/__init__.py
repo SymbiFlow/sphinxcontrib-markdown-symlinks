@@ -213,11 +213,13 @@ class LinkParser(parser.CommonMarkParser, object):
         # If there's not a url scheme (e.g. 'https' for 'https:...' links),
         # or there is a scheme but it's not in the list of known_url_schemes,
         # then assume it's a cross-reference and pass it to Sphinx as an `:any:` ref.
-        known_url_schemes = self.config.get('known_url_schemes')
-        if known_url_schemes:
-            scheme_known = url_check.scheme in known_url_schemes
-        else:
-            scheme_known = bool(url_check.scheme)
+
+        # XXX Fix `unknown config attribute of Parser` temporarily not using known_url_schemes
+        #known_url_schemes = self.config.get('known_url_schemes')
+        #if known_url_schemes:
+        #    scheme_known = url_check.scheme in known_url_schemes
+        #else:
+        scheme_known = bool(url_check.scheme)
 
         is_dest_xref = url_check.fragment and destination[:1] != '#'
 
