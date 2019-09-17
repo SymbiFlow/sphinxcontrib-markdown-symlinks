@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="markdown_code_symlinks",
-    version="0.0.1",
+    version="0.0.2",
     author="SymbiFlow Authors",
     author_email="symbiflow@lists.librecores.org",
     description="Python library to solve cross-reference links \
