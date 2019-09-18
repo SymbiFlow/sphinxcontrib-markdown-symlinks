@@ -35,7 +35,7 @@ Or add the following to your `requirements.txt`
 # Add Markdown support by following the recommonmark install instructions.
 # https://recommonmark.readthedocs.io/en/latest/#getting-started
 
-from recommonmark.parser import CommonMarkParser
+from markdown_code_symlinks import LinkParser, MarkdownSymlinksDomain
 
 source_parsers = {
     '.md': 'markdown_code_symlinks.LinkParser',
@@ -43,8 +43,6 @@ source_parsers = {
 
 source_suffix = ['.rst', '.md']
 
-# Replace ;
-from markdown_links import MarkdownLinks
 def setup(app):
     github_code_repo = 'https://github.com/repo/link'
     github_code_branch = 'blob/your/branch'
