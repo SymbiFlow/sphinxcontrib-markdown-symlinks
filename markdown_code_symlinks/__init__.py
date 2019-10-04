@@ -24,7 +24,6 @@ We also want links from two Markdown documents found in the Sphinx docs to
 work, so that is also fixed up.
 """
 
-
 def path_contains(parent_path, child_path):
     """Check a path contains another path.
 
@@ -64,6 +63,15 @@ def relative(parent_dir, child_path):
     assert path_contains(parent_dir, child_dir), "{} not inside {}".format(
         child_path, parent_dir)
     return os.path.relpath(child_path, start=parent_dir)
+
+
+def search_files(root_dir, search_file):
+    for dirpath, _, files in os.walk(root_dir):
+        for name in files:
+            if name == search_file:
+                return os.path.realpath(os.path.join(dirpath, name))
+
+    assert False, "The image has not been found!"
 
 
 class MarkdownSymlinksDomain(Domain):
@@ -200,6 +208,50 @@ Current Value: {}
 
 
 class LinkParser(parser.CommonMarkParser, object):
+    def visit_image(self, mdnode):
+        img_node = nodes.image()
+
+        destination = mdnode.destination
+        url_check = urlparse(destination)
+        scheme_known = bool(url_check.scheme)
+
+        count = 0
+        node = mdnode.parent
+        while node != None:
+            node = node.parent
+            count += 1
+
+        if not scheme_known:
+            file_path = search_files(self.config['code_root_dir'], destination)
+            new_destination = os.path.join(self.config['imgs_root_dir'], destination)
+
+            try:
+                os.symlink(file_path, new_destination)
+            except:
+                print("Warning: Image already exists! ({})".format(new_destination))
+
+            destination = relative(self.config['docs_root_dir'], new_destination)
+
+            for i in range(0, count):
+                destination = os.path.join('..', destination)
+
+        img_node['uri'] = destination
+
+        if mdnode.first_child and mdnode.first_child.literal:
+            content = [mdnode.first_child.literal]
+            n = mdnode.first_child
+            mdnode.first_child.literal = ''
+            mdnode.first_child = mdnode.last_child = None
+            while getattr(n, 'nxt'):
+                n.nxt, n = None, n.nxt
+                content.append(n.literal)
+            img_node['alt'] = ''.join(content)
+
+        print(img_node['uri'])
+
+        self.current_node.append(img_node)
+        self.current_node = img_node
+
     def visit_link(self, mdnode):
         ref_node = nodes.reference()
 
