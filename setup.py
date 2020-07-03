@@ -14,7 +14,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/SymbiFlow/markdown-code-symlinks",
     packages=setuptools.find_packages(),
-    install_requires=['docutils', 'sphinx', 'recommonmark'],
+    install_requires=['docutils', 'sphinx', 'recommonmark', 'packaging'],
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 2",
