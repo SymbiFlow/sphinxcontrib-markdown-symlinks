@@ -1,0 +1,44 @@
+language: python
+  - "3.7"
+
+install:
+  - pip install -r tests/docs/requirements.txt
+  - python3 setup.py install
+
+stages:
+  - name: Tests
+
+jobs:
+  - stage: Tests
+    name: "Build Tests"
+    script:
+      - cd tests/docs
+      - make html
+
+  - stage: Tests
+    name: "Sphinx < 3.0 Internal Link Test"
+    script:
+      - cd tests/docs
+      - pip3 install sphinx==2.4
+      - make TEST=int_link_test linkcheck
+
+  - stage: Tests
+    name: "Sphinx >= 3.0 Internal Link Test"
+    script:
+      - cd tests/docs
+      - pip3 install sphinx==3.0
+      - make TEST=int_link_test linkcheck
+
+  # - stage: Tests
+  #   name: "Sphinx < 3.0 External Link Test"
+  #   script:
+  #     - cd tests/docs
+  #     - pip3 install sphinx==2.4
+  #     - make TEST=ext_link_test linkcheck
+
+  # - stage: Tests
+  #   name: "Sphinx >= 3.0 External Link Test"
+  #   script:
+  #     - cd tests/docs
+  #     - pip3 install sphinx==3.0
+  #     - make TEST=ext_link_test linkcheck
