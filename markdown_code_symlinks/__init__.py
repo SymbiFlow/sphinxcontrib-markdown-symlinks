@@ -113,20 +113,11 @@ Document already in mapping!
     New Value: {}
 Current Value: {}
 """
-        sphinx_v3_0 = packaging.version.parse("3.0.0")
-        sphinx_v = packaging.version.parse(sphinx.__version__)
 
-        if sphinx_v < sphinx_v3_0:
-            assert docs_rel not in cls.mapping['docs2code'], assert_msg_temp.format(docs_rel, cls.mapping['docs2code'][docs_rel])
-            assert code_rel not in cls.mapping['code2docs'], assert_msg_temp.format(code_rel, cls.mapping['code2docs'][code_rel])
-            cls.mapping['docs2code'][docs_rel] = code_rel  # Used for validation in assertions
-            cls.mapping['code2docs'][code_rel] = docs_rel  # Stores link substitution
-        else:
-            code_rel_no_ext = os.path.splitext(code_rel)[0]
-            assert docs_rel not in cls.mapping['docs2code'], assert_msg_temp.format(docs_rel, cls.mapping['docs2code'][docs_rel])
-            assert code_rel_no_ext not in cls.mapping['code2docs'], assert_msg_temp.format(code_rel_no_ext, cls.mapping['code2docs'][code_rel_no_ext])
-            cls.mapping['docs2code'][docs_rel] = code_rel  # Used for validation in assertions
-            cls.mapping['code2docs'][code_rel_no_ext] = docs_rel  # Stores link substitution
+        assert docs_rel not in cls.mapping['docs2code'], assert_msg_temp.format(docs_rel, cls.mapping['docs2code'][docs_rel])
+        assert code_rel not in cls.mapping['code2docs'], assert_msg_temp.format(code_rel, cls.mapping['code2docs'][code_rel])
+        cls.mapping['docs2code'][docs_rel] = code_rel  # Used for validation in assertions
+        cls.mapping['code2docs'][code_rel] = docs_rel  # Stores link substitution
 
     @classmethod
     def find_links(cls):
